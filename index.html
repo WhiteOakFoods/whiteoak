@@ -348,52 +348,63 @@ function loadFromSheet(){
   if(!cfg.url||!cfg.key){ goTo('settings', document.querySelector('.ntab:last-child')); toast('Set up connection first'); return; }
   if(!navigator.onLine){ toast('Offline — showing cached data'); renderAll(); return; }
   setLoading(true);
-  // JSONP approach
-  const cbName = '__wof_'+Date.now();
-  const script = document.createElement('script');
-  const url = cfg.url+'?action=getData&key='+encodeURIComponent(cfg.key)+'&callback='+cbName;
+
+  // Use iframe + postMessage to bypass CORS completely
+  const existing = document.getElementById('__wof_iframe');
+  if(existing) existing.remove();
+
+  const iframe = document.createElement('iframe');
+  iframe.id = '__wof_iframe';
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;';
+  iframe.src = cfg.url + '?action=getData&key=' + encodeURIComponent(cfg.key);
+  document.body.appendChild(iframe);
+
   let done = false;
 
-  window[cbName] = function(res){
+  const onMsg = function(event){
+    if(done) return;
+    // Accept messages from Google's script.google.com domain
+    if(!event.origin.includes('google.com') && !event.origin.includes('googleusercontent.com')) return;
     done = true;
-    delete window[cbName];
-    try{ document.head.removeChild(script); }catch(e){}
+    window.removeEventListener('message', onMsg);
+    iframe.remove();
     setLoading(false);
-    if(res && res.ok){
-      data.products = res.products||[];
-      data.orders = res.orders||[];
-      data.expenses = res.expenses||[];
-      saveLocal();
-      const now = new Date();
-      setEl('last-updated','Updated '+now.toLocaleTimeString());
-      setEl('sync-status','Last synced: '+now.toLocaleString());
-      renderAll();
-      toast('Data loaded ✓');
-    } else {
-      toast('Error: '+(res&&res.error||'Check URL and key'));
+    try{
+      const res = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      if(res && res.ok){
+        data.products = res.products||[];
+        data.orders   = res.orders||[];
+        data.expenses = res.expenses||[];
+        saveLocal();
+        const now = new Date();
+        setEl('last-updated','Updated '+now.toLocaleTimeString());
+        setEl('sync-status','Last synced: '+now.toLocaleString());
+        renderAll();
+        toast('Data loaded ✓');
+      } else {
+        toast('Error: '+(res&&res.error||'Check URL and key'));
+      }
+    } catch(err){
+      toast('Could not read data — check key');
     }
   };
 
-  script.onerror = function(){
-    done = true;
-    delete window[cbName];
-    setLoading(false);
-    toast('Could not connect — check URL');
-  };
-
-  script.src = url;
-  document.head.appendChild(script);
+  window.addEventListener('message', onMsg);
 
   setTimeout(()=>{
     if(!done){
       done = true;
-      if(window[cbName]) delete window[cbName];
-      try{ document.head.removeChild(script); }catch(e){}
+      window.removeEventListener('message', onMsg);
+      try{ iframe.remove(); }catch(e){}
       setLoading(false);
-      toast('Timeout — using cached data');
-      renderAll();
+      if(data.orders.length||data.products.length){
+        toast('Using cached data (could not connect)');
+        renderAll();
+      } else {
+        toast('Could not connect — check URL and key in Settings');
+      }
     }
-  }, 12000);
+  }, 15000);
 }
 
 function setLoading(on){
