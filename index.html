@@ -18,18 +18,18 @@
 }
 html,body{height:100%;background:var(--sand);font-family:'DM Sans',sans-serif;color:var(--ink);overscroll-behavior:none;font-size:14px}
 .shell{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto;background:var(--cream);position:relative;overflow:hidden}
-.topbar{background:var(--g);color:#fff;padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar{background:var(--g);color:#fff;padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
 .brand-name{font-size:17px;font-weight:700;letter-spacing:-.3px}
 .brand-sub{font-size:10px;opacity:.5;text-transform:uppercase;letter-spacing:1.2px;margin-top:2px}
 .topbar-r{display:flex;align-items:center;gap:8px}
-.refresh-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:5px}
+.refresh-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer}
 .refresh-btn:disabled{opacity:.5}
 .offline-pill{background:var(--amb);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:none}
 .offline-pill.show{display:block}
-.loading-bar{height:3px;background:var(--gl);width:0%;transition:width .4s;position:absolute;top:0;left:0;right:0}
-.loading-bar.active{width:70%;animation:loadpulse 1.5s infinite}
-.loading-bar.done{width:100%;transition:width .2s}
-@keyframes loadpulse{0%{width:20%}50%{width:80%}100%{width:20%}}
+.lbar{height:3px;background:var(--gl);width:0;transition:width .3s;position:absolute;bottom:0;left:0}
+.lbar.on{animation:lp 1.5s infinite}
+.lbar.done{width:100%}
+@keyframes lp{0%{width:10%;left:0}50%{width:60%;left:20%}100%{width:10%;left:80%}}
 .screens{flex:1;overflow:hidden;position:relative}
 .screen{position:absolute;inset:0;overflow-y:auto;padding:0 0 120px;display:none;-webkit-overflow-scrolling:touch}
 .screen.active{display:block}
@@ -41,34 +41,25 @@ html,body{height:100%;background:var(--sand);font-family:'DM Sans',sans-serif;co
 .ntab.active .nlabel{color:var(--g)}
 .ntab.active::after{content:'';position:absolute;top:0;left:20%;right:20%;height:3px;background:var(--gl);border-radius:0 0 4px 4px}
 .nbadge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
-/* cards */
 .shead{padding:16px 18px 8px;display:flex;align-items:center;justify-content:space-between}
 .stitle{font-size:18px;font-weight:700;letter-spacing:-.3px}
 .ssub{font-size:12px;color:var(--i3);margin-top:1px}
 .card{background:var(--wh);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin:0 18px 12px;box-shadow:var(--sh)}
-.ctitle{font-size:13px;font-weight:700;color:var(--i2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
-/* pills */
+.ctitle{font-size:11px;font-weight:700;color:var(--i3);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px}
 .pills{display:flex;gap:10px;padding:0 18px 12px;flex-wrap:wrap}
 .pill{flex:1;min-width:calc(50% - 5px);background:var(--wh);border:1px solid var(--bdr);border-radius:12px;padding:12px 14px;box-shadow:var(--sh)}
 .pill-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--i3);margin-bottom:4px}
 .pill-v{font-family:'DM Mono',monospace;font-size:19px;font-weight:500;letter-spacing:-.5px}
 .pill-v.green{color:var(--gm)}.pill-v.red{color:var(--red)}.pill-v.amb{color:var(--amb)}.pill-v.blue{color:var(--blu)}
-/* period tabs */
 .ptabs{display:flex;gap:4px;padding:0 18px 12px}
 .ptab{flex:1;text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:600;border:1.5px solid var(--bdr);background:var(--wh);color:var(--i3);cursor:pointer}
 .ptab.active{background:var(--g);border-color:var(--g);color:#fff}
-/* bars */
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.bar-label{font-size:12.5px;color:var(--i2);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-label{font-size:12px;color:var(--i2);width:120px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bar-wrap{flex:1;height:8px;background:var(--bdr);border-radius:4px;overflow:hidden}
 .bar-fill{height:8px;border-radius:4px;background:var(--gl);transition:width .5s}
-.bar-fill.red{background:var(--red)}.bar-fill.amb{background:var(--amb)}.bar-fill.blue{background:var(--blu)}
-.bar-val{font-family:'DM Mono',monospace;font-size:11.5px;color:var(--i3);width:70px;text-align:right;flex-shrink:0}
-/* list rows */
-.list-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:13px}
-.list-row:last-child{border-bottom:none}
-.list-label{color:var(--i2)}.list-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
-/* orders */
+.bar-fill.red{background:var(--red)}.bar-fill.amb{background:var(--amb)}
+.bar-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--i3);width:65px;text-align:right;flex-shrink:0}
 .ocard{background:var(--wh);border:1px solid var(--bdr);border-radius:12px;padding:13px 15px;margin:0 18px 10px;cursor:pointer;box-shadow:var(--sh)}
 .ocard:active{box-shadow:var(--shl)}
 .ocard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
@@ -77,20 +68,17 @@ html,body{height:100%;background:var(--sand);font-family:'DM Sans',sans-serif;co
 .ometa{font-size:11.5px;color:var(--i3);margin-bottom:6px}
 .oitems{font-size:12.5px;color:var(--i2);line-height:1.4;margin-bottom:7px}
 .chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.chip-amb{background:var(--aml);color:var(--amb)}.chip-green{background:var(--gll);color:var(--gm)}.chip-red{background:var(--rl);color:var(--red)}.chip-blue{background:var(--bll);color:var(--blu)}.chip-grey{background:#f0f0f0;color:var(--i3)}
-/* filter */
+.chip-amb{background:var(--aml);color:var(--amb)}.chip-green{background:var(--gll);color:var(--gm)}.chip-red{background:var(--rl);color:var(--red)}.chip-blue{background:var(--bll);color:var(--blu)}
 .frow{display:flex;gap:6px;padding:0 18px 12px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
 .frow::-webkit-scrollbar{display:none}
 .fchip{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:500;border:1.5px solid var(--bdr);background:var(--wh);color:var(--i3);cursor:pointer;white-space:nowrap}
 .fchip.active{background:var(--g);border-color:var(--g);color:#fff}
-/* overlay / drawer */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
 .drawer{background:var(--cream);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92dvh;overflow-y:auto;padding:0 0 env(safe-area-inset-bottom,16px);animation:slideUp .22s ease}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .dhandle{width:40px;height:4px;background:var(--bdr);border-radius:2px;margin:10px auto 0}
 .dtitle{font-size:18px;font-weight:700;padding:14px 18px 10px;letter-spacing:-.3px}
-/* actions */
 .arow{display:flex;gap:8px;padding:12px 18px;flex-wrap:wrap}
 .abtn{flex:1;min-width:90px;padding:11px 10px;border-radius:10px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
 .abtn:active{opacity:.8}
@@ -101,7 +89,6 @@ html,body{height:100%;background:var(--sand);font-family:'DM Sans',sans-serif;co
 .dvalue{font-size:14.5px;color:var(--ink);font-weight:500}
 .dirow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--bdr);font-size:13.5px}
 .dirow:last-child{border-bottom:none}
-/* invoice preview */
 .inv-wrap{background:var(--wh);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin:0 18px 12px;font-size:12.5px}
 .inv-head{background:var(--g);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start}
 .inv-ihead{background:var(--sand);padding:6px 14px;display:flex;justify-content:space-between;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--i3)}
@@ -110,39 +97,20 @@ html,body{height:100%;background:var(--sand);font-family:'DM Sans',sans-serif;co
 .inv-row{display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--bdr)}
 .inv-total{background:var(--gll);font-weight:700;font-size:14px}
 .inv-owed{background:var(--rl);color:var(--red);font-weight:700}
-/* form */
 .fbody{padding:0 18px}
 .fgroup{margin-bottom:13px}
 .flabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--i3);margin-bottom:5px;display:block}
-input[type=text],input[type=password],select,textarea{width:100%;background:var(--wh);border:1.5px solid var(--bdr);border-radius:10px;padding:12px 13px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .12s}
+input,select,textarea{width:100%;background:var(--wh);border:1.5px solid var(--bdr);border-radius:10px;padding:12px 13px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .12s}
 input:focus,select:focus,textarea:focus{border-color:var(--gl)}
 textarea{resize:none;min-height:65px}
 .sbtn{width:100%;background:var(--gl);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
 .sbtn:active{background:var(--g)}
-.cbtn{width:100%;background:transparent;color:var(--i3);border:1.5px solid var(--bdr);border-radius:12px;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:16px}
-/* toast */
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--g);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:all .25s ease;white-space:nowrap;box-shadow:var(--shl);max-width:calc(100% - 36px);text-align:center;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* empty */
-.empty{text-align:center;padding:48px 24px}
-.eicon{font-size:44px;margin-bottom:12px}
-.etitle{font-size:15px;font-weight:600;color:var(--i2);margin-bottom:5px}
-.esub{font-size:12.5px;color:var(--i3);line-height:1.5}
-/* settings rows */
-.srow{background:var(--wh);border-bottom:1px solid var(--bdr);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.srow:active{background:var(--gll)}
-.srtitle{font-size:14px;font-weight:600}
-.srsub{font-size:12px;color:var(--i3);margin-top:1px}
-/* P&L */
 .pnl-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:13.5px}
 .pnl-row:last-child{border-bottom:none}
-.pnl-row.head{background:var(--g);color:#fff;padding:8px 12px;border-radius:6px;margin-bottom:6px;font-weight:700}
-.pnl-row.subtotal{font-weight:600;color:var(--gm)}
-.pnl-row.net{font-weight:700;font-size:15px;background:var(--gll);padding:10px 12px;border-radius:6px;margin-top:6px}
-.pnl-row.net.loss{background:var(--rl);color:var(--red)}
+.pnl-sub{font-weight:600;color:var(--gm)}
+.pnl-net{font-weight:700;font-size:15px;background:var(--gll);padding:10px 12px;border-radius:6px;margin-top:6px;border-bottom:none}
+.pnl-net.loss{background:var(--rl);color:var(--red)}
 .mono{font-family:'DM Mono',monospace}
-.s8{height:8px}.s16{height:16px}
-/* product rows */
 .prow{background:var(--wh);border-bottom:1px solid var(--bdr);padding:12px 18px;display:flex;align-items:center;gap:12px}
 .pdot{width:40px;height:40px;border-radius:11px;background:var(--gll);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .pinfo{flex:1;min-width:0}
@@ -152,53 +120,66 @@ textarea{resize:none;min-height:65px}
 .pprice{font-family:'DM Mono',monospace;font-size:14px;color:var(--gm);font-weight:500}
 .pmargin{font-size:11px;font-weight:600;margin-top:2px}
 .ptbadge{font-size:10px;background:var(--bll);color:var(--blu);padding:2px 7px;border-radius:20px;font-weight:600;margin-top:3px;display:inline-block}
-/* section label */
-.slabel{padding:10px 18px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--i4);background:var(--sand)}
+.srow{background:var(--wh);border-bottom:1px solid var(--bdr);padding:13px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.srow:active{background:var(--gll)}
+.srtitle{font-size:14px;font-weight:600}
+.srsub{font-size:12px;color:var(--i3);margin-top:1px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--g);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:all .25s ease;white-space:nowrap;box-shadow:var(--shl);max-width:calc(100% - 36px);text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;padding:48px 24px}
+.eicon{font-size:44px;margin-bottom:12px}
+.etitle{font-size:15px;font-weight:600;color:var(--i2);margin-bottom:5px}
+.esub{font-size:12.5px;color:var(--i3);line-height:1.5}
+.s16{height:16px}
+/* connecting screen */
+.connect-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:32px;text-align:center}
+.connect-logo{font-size:56px;margin-bottom:16px}
+.connect-title{font-size:22px;font-weight:700;color:var(--g);margin-bottom:8px}
+.connect-sub{font-size:14px;color:var(--i3);line-height:1.6;margin-bottom:28px}
 </style>
 </head>
 <body>
 <div class="shell">
-  <div style="position:relative;">
-    <div class="topbar">
-      <div><div class="brand-name">White Oak Foods</div><div class="brand-sub">Analytics & Operations</div></div>
-      <div class="topbar-r">
-        <span class="offline-pill" id="offline-pill">OFFLINE</span>
-        <button class="refresh-btn" id="refresh-btn" onclick="loadFromSheet()">↻ Refresh</button>
-      </div>
+  <div class="topbar">
+    <div><div class="brand-name">White Oak Foods</div><div class="brand-sub">Analytics & Operations</div></div>
+    <div class="topbar-r">
+      <span class="offline-pill" id="offline-pill">OFFLINE</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="loadData()">↻ Refresh</button>
     </div>
-    <div class="loading-bar" id="loading-bar"></div>
+    <div class="lbar" id="lbar"></div>
   </div>
 
   <div class="screens">
 
-    <!-- ══ DASHBOARD ══ -->
+    <!-- DASHBOARD -->
     <div class="screen active" id="screen-dash">
       <div class="shead">
-        <div><div class="stitle">Dashboard</div><div class="ssub" id="last-updated">Loading data…</div></div>
+        <div><div class="stitle">Dashboard</div><div class="ssub" id="last-updated">Pull to refresh</div></div>
       </div>
       <div class="ptabs">
         <div class="ptab active" onclick="setPeriod('week',this)">This Week</div>
         <div class="ptab" onclick="setPeriod('month',this)">This Month</div>
         <div class="ptab" onclick="setPeriod('all',this)">All Time</div>
       </div>
-      <div class="pills" id="dash-pills"></div>
-      <!-- P&L -->
-      <div class="card">
-        <div class="ctitle">Profit & Loss</div>
-        <div id="pnl-content"></div>
+      <div class="pills" id="dash-pills">
+        <div class="pill"><div class="pill-l">Revenue</div><div class="pill-v green" id="d-rev">₦0</div></div>
+        <div class="pill"><div class="pill-l">Net Profit</div><div class="pill-v green" id="d-net">₦0</div></div>
+        <div class="pill"><div class="pill-l">Expenses</div><div class="pill-v amb" id="d-exp">₦0</div></div>
+        <div class="pill"><div class="pill-l">Owed to Me</div><div class="pill-v blue" id="d-owed">₦0</div></div>
       </div>
-      <!-- Top products -->
+      <div class="card">
+        <div class="ctitle">Profit & Loss Statement</div>
+        <div id="pnl"></div>
+      </div>
       <div class="card">
         <div class="ctitle">Popular Products</div>
-        <div id="top-products"></div>
+        <div id="top-prods"></div>
       </div>
     </div>
 
-    <!-- ══ ORDERS ══ -->
+    <!-- ORDERS -->
     <div class="screen" id="screen-orders">
-      <div class="shead">
-        <div><div class="stitle">Orders</div><div class="ssub" id="orders-sub">Loading…</div></div>
-      </div>
+      <div class="shead"><div><div class="stitle">Orders</div><div class="ssub" id="orders-sub">—</div></div></div>
       <div class="pills" style="padding-bottom:8px;">
         <div class="pill"><div class="pill-l">Owed to me</div><div class="pill-v amb" id="sum-owed">₦0</div></div>
         <div class="pill"><div class="pill-l">This month</div><div class="pill-v green" id="sum-month">₦0</div></div>
@@ -212,54 +193,40 @@ textarea{resize:none;min-height:65px}
       <div id="orders-list"></div>
     </div>
 
-    <!-- ══ EXPENSES ══ -->
+    <!-- EXPENSES -->
     <div class="screen" id="screen-expenses">
-      <div class="shead">
-        <div><div class="stitle">Expenses</div><div class="ssub">Spending breakdown</div></div>
+      <div class="shead"><div><div class="stitle">Expenses</div><div class="ssub">Spending breakdown</div></div></div>
+      <div class="pills" id="exp-pills">
+        <div class="pill"><div class="pill-l">This Month</div><div class="pill-v red" id="exp-month">₦0</div></div>
+        <div class="pill"><div class="pill-l">All Time</div><div class="pill-v amb" id="exp-all">₦0</div></div>
       </div>
-      <div class="pills" id="exp-pills"></div>
-      <div class="card">
-        <div class="ctitle">By Category (This Month)</div>
-        <div id="exp-cats-month"></div>
-      </div>
-      <div class="card">
-        <div class="ctitle">By Category (All Time)</div>
-        <div id="exp-cats-all"></div>
-      </div>
-      <div style="padding:0 18px 8px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--i3);">Recent Expenses</div></div>
+      <div class="card"><div class="ctitle">By Category — This Month</div><div id="exp-cats-m"></div></div>
+      <div class="card"><div class="ctitle">By Category — All Time</div><div id="exp-cats-a"></div></div>
+      <div style="padding:0 18px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--i3);">Recent Expenses</div>
       <div id="exp-list"></div>
     </div>
 
-    <!-- ══ PRODUCTS ══ -->
+    <!-- PRODUCTS -->
     <div class="screen" id="screen-products">
-      <div class="shead">
-        <div><div class="stitle">Products</div><div class="ssub" id="prod-sub">Price list & margins</div></div>
-      </div>
+      <div class="shead"><div><div class="stitle">Products</div><div class="ssub" id="prod-sub">—</div></div></div>
       <div id="products-list"></div>
     </div>
 
-    <!-- ══ SETTINGS ══ -->
+    <!-- SETTINGS -->
     <div class="screen" id="screen-settings">
-      <div class="shead"><div><div class="stitle">Settings</div><div class="ssub">Connect to Google Sheet</div></div></div>
+      <div class="shead"><div><div class="stitle">Settings</div><div class="ssub">WhatsApp & data</div></div></div>
       <div style="background:var(--gll);border:1.5px solid var(--gl);border-radius:12px;padding:14px;margin:0 18px 14px;">
-        <div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:8px;">How to get your Web App URL</div>
-        <div style="font-size:12.5px;color:var(--gm);line-height:1.6;">
-          1. Open your Google Sheet<br>
-          2. Extensions → Apps Script<br>
-          3. Deploy → New deployment → Web App → Anyone<br>
-          4. Copy the URL and paste below
-        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:6px;">✅ Connected to Google Sheet</div>
+        <div style="font-size:12.5px;color:var(--gm);line-height:1.6;">Data loads directly from your published Sheet. To update data, edit the Sheet — then tap Refresh in the app.</div>
       </div>
       <div class="fbody" style="margin-bottom:14px;">
-        <div class="fgroup"><label class="flabel">Web App URL</label><input type="text" id="cfg-url" placeholder="https://script.google.com/macros/s/…" style="font-size:13px;"></div>
-        <div class="fgroup"><label class="flabel">Secret Key</label><input type="password" id="cfg-key" placeholder="e.g. WhiteOak2026" style="font-size:13px;"></div>
-        <div class="fgroup"><label class="flabel">Your WhatsApp Number</label><input type="text" id="cfg-wa" placeholder="+2348012345678" style="font-size:13px;"></div>
-        <button class="sbtn" onclick="saveSettings()">Save & Load Data</button>
+        <div class="fgroup"><label class="flabel">Your WhatsApp Number</label><input type="text" id="cfg-wa" placeholder="+2348012345678" style="font-size:14px;"></div>
+        <button class="sbtn" onclick="saveWA()">Save</button>
       </div>
       <div style="height:1px;background:var(--bdr);margin:0 18px 14px;"></div>
       <div class="srow" onclick="exportCache()"><div><div class="srtitle">⬇ Export cached data</div><div class="srsub">Download as JSON backup</div></div><div style="font-size:18px;color:var(--i4);">›</div></div>
       <div class="s16"></div>
-      <div style="text-align:center;font-size:12px;color:var(--i4);padding:8px;" id="sync-status">Not connected</div>
+      <div style="text-align:center;font-size:12px;color:var(--i4);padding:8px;" id="sync-status">—</div>
       <div class="s16"></div>
     </div>
 
@@ -274,64 +241,61 @@ textarea{resize:none;min-height:65px}
   </div>
 </div>
 
-<!-- toast -->
 <div class="toast" id="toast"></div>
 
-<!-- order detail drawer -->
+<!-- order detail -->
 <div class="overlay" id="ov-order" onclick="closeIfOv(event,'ov-order')">
   <div class="drawer"><div id="order-detail"></div></div>
 </div>
 
-<!-- invoice drawer -->
-<div class="overlay" id="ov-invoice" onclick="closeIfOv(event,'ov-invoice')">
+<!-- invoice/sheet -->
+<div class="overlay" id="ov-inv" onclick="closeIfOv(event,'ov-inv')">
   <div class="drawer">
     <div class="dhandle"></div>
-    <div class="dtitle" id="inv-drawer-title">Invoice</div>
-    <div id="inv-content"></div>
+    <div class="dtitle" id="inv-title">Invoice</div>
+    <div id="inv-body"></div>
     <div class="arow">
-      <button class="abtn ab-wa" onclick="shareInvoiceWA()">💬 Share via WhatsApp</button>
-      <button class="abtn ab-green" onclick="closeDrawer('ov-invoice')">Close</button>
+      <button class="abtn ab-wa" onclick="shareWA()">💬 Share via WhatsApp</button>
+      <button class="abtn ab-green" onclick="closeDrawer('ov-inv')">Close</button>
     </div>
   </div>
 </div>
 
 <script>
+// ══ CONFIG ══
+const SHEET_ID = '1GtsCOjG8nOfVcpZDhQ98Gf4sHenLrLVh7wZaR6hnC7w';
+const BASE = 'https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&sheet=';
+const KEY = 'wof_v3';
+
 // ══ STATE ══
-const KEY = 'wof_analytics_v1';
-let cfg = { url:'', key:'', wa:'' };
+let wa = '';
 let data = { products:[], orders:[], expenses:[] };
-let dashPeriod = 'week';
+let period = 'week';
 let orderFilter = 'all';
-let activeInvoiceOrder = null;
+let activeOrder = null;
 
 // ══ PERSIST ══
-function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify({cfg, data})); }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify({wa, data})); }catch(e){} }
 function loadLocal(){
   try{
     const s = localStorage.getItem(KEY);
-    if(s){ const d = JSON.parse(s); cfg = d.cfg||cfg; data = d.data||data; }
+    if(s){ const d=JSON.parse(s); wa=d.wa||''; data=d.data||data; }
   }catch(e){}
 }
 
 // ══ UTILS ══
 function fmt(n){ return Math.round(parseFloat(n)||0).toLocaleString('en-NG'); }
-function fmtK(n){ n=Math.round(parseFloat(n)||0); return n>=1000000?'₦'+(n/1000000).toFixed(1)+'M':n>=1000?'₦'+(n/1000).toFixed(0)+'k':'₦'+n.toLocaleString('en-NG'); }
+function fmtK(n){ n=Math.round(parseFloat(n)||0); return n>=1000000?'₦'+(n/1000000).toFixed(1)+'M':n>=1000?'₦'+(n/1000).toFixed(0)+'k':'₦'+fmt(n); }
 function today(){ return new Date().toISOString().split('T')[0]; }
-function toast(msg){ const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2600); }
+function toast(msg,dur){ const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),dur||2600); }
 function setEl(id,v){ const e=document.getElementById(id); if(e) e.textContent=v; }
 function closeIfOv(e,id){ if(e.target.id===id) closeDrawer(id); }
 function openDrawer(id){ document.getElementById(id).classList.add('open'); }
 function closeDrawer(id){ document.getElementById(id).classList.remove('open'); }
+function wkNum(d){ const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); const dy=dt.getUTCDay()||7; dt.setUTCDate(dt.getUTCDate()+4-dy); const y1=new Date(Date.UTC(dt.getUTCFullYear(),0,1)); return Math.ceil((((dt-y1)/86400000)+1)/7); }
 
-function weekNum(d){
-  const dt = new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-  const day = dt.getUTCDay()||7; dt.setUTCDate(dt.getUTCDate()+4-day);
-  const y1 = new Date(Date.UTC(dt.getUTCFullYear(),0,1));
-  return Math.ceil((((dt-y1)/86400000)+1)/7);
-}
-
-// ══ NAVIGATION ══
-function goTo(sc, tab){
+// ══ NAV ══
+function goTo(sc,tab){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
   document.getElementById('screen-'+sc).classList.add('active');
@@ -343,170 +307,187 @@ function goTo(sc, tab){
   if(sc==='settings') renderSettings();
 }
 
-// ══ LOAD DATA FROM SHEET ══
-function loadFromSheet(){
-  if(!cfg.url||!cfg.key){ goTo('settings', document.querySelector('.ntab:last-child')); toast('Set up connection first'); return; }
-  if(!navigator.onLine){ toast('Offline — showing cached data'); renderAll(); return; }
-  setLoading(true);
+// ══ LOAD DATA FROM PUBLISHED SHEET (CSV) ══
+async function loadData(){
+  const btn=document.getElementById('refresh-btn');
+  const bar=document.getElementById('lbar');
+  btn.textContent='Loading…'; btn.disabled=true;
+  bar.className='lbar on';
 
-  // Use iframe + postMessage to bypass CORS completely
-  const existing = document.getElementById('__wof_iframe');
-  if(existing) existing.remove();
+  if(!navigator.onLine){
+    toast('Offline — showing saved data');
+    btn.textContent='↻ Refresh'; btn.disabled=false; bar.className='lbar';
+    renderAll(); return;
+  }
 
-  const iframe = document.createElement('iframe');
-  iframe.id = '__wof_iframe';
-  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;';
-  iframe.src = cfg.url + '?action=getData&key=' + encodeURIComponent(cfg.key);
-  document.body.appendChild(iframe);
+  try{
+    // Fetch all three sheets in parallel
+    const [ordersCSV, productsCSV, expensesCSV] = await Promise.all([
+      fetchCSV('Orders'),
+      fetchCSV('Products'),
+      fetchCSV('Expenses')
+    ]);
 
-  let done = false;
+    data.orders   = parseOrders(ordersCSV);
+    data.products = parseProducts(productsCSV);
+    data.expenses = parseExpenses(expensesCSV);
 
-  const onMsg = function(event){
-    if(done) return;
-    // Accept messages from Google's script.google.com domain
-    if(!event.origin.includes('google.com') && !event.origin.includes('googleusercontent.com')) return;
-    done = true;
-    window.removeEventListener('message', onMsg);
-    iframe.remove();
-    setLoading(false);
-    try{
-      const res = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-      if(res && res.ok){
-        data.products = res.products||[];
-        data.orders   = res.orders||[];
-        data.expenses = res.expenses||[];
-        saveLocal();
-        const now = new Date();
-        setEl('last-updated','Updated '+now.toLocaleTimeString());
-        setEl('sync-status','Last synced: '+now.toLocaleString());
-        renderAll();
-        toast('Data loaded ✓');
-      } else {
-        toast('Error: '+(res&&res.error||'Check URL and key'));
-      }
-    } catch(err){
-      toast('Could not read data — check key');
-    }
-  };
-
-  window.addEventListener('message', onMsg);
-
-  setTimeout(()=>{
-    if(!done){
-      done = true;
-      window.removeEventListener('message', onMsg);
-      try{ iframe.remove(); }catch(e){}
-      setLoading(false);
-      if(data.orders.length||data.products.length){
-        toast('Using cached data (could not connect)');
-        renderAll();
-      } else {
-        toast('Could not connect — check URL and key in Settings');
-      }
-    }
-  }, 15000);
+    saveLocal();
+    const now = new Date();
+    setEl('last-updated', 'Updated ' + now.toLocaleTimeString());
+    setEl('sync-status', 'Last synced: ' + now.toLocaleString());
+    bar.className='lbar done';
+    setTimeout(()=>bar.className='lbar', 400);
+    btn.textContent='↻ Refresh'; btn.disabled=false;
+    renderAll();
+    toast('Data loaded ✓');
+  } catch(err){
+    bar.className='lbar';
+    btn.textContent='↻ Refresh'; btn.disabled=false;
+    toast('Could not load — using cached data');
+    renderAll();
+    console.error(err);
+  }
 }
 
-function setLoading(on){
-  const bar = document.getElementById('loading-bar');
-  const btn = document.getElementById('refresh-btn');
-  if(on){ bar.className='loading-bar active'; btn.textContent='Loading…'; btn.disabled=true; }
-  else{ bar.className='loading-bar done'; btn.textContent='↻ Refresh'; btn.disabled=false; setTimeout(()=>bar.className='loading-bar',400); }
+async function fetchCSV(sheetName){
+  const url = BASE + encodeURIComponent(sheetName);
+  const res = await fetch(url, { cache: 'no-store' });
+  if(!res.ok) throw new Error('Failed to fetch ' + sheetName);
+  return res.text();
+}
+
+// ══ CSV PARSERS ══
+function parseCSV(text){
+  const rows = [];
+  const lines = text.split('\n');
+  for(let line of lines){
+    if(!line.trim()) continue;
+    const cols = [];
+    let cur='', inQ=false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){ inQ=!inQ; }
+      else if(c===','&&!inQ){ cols.push(cur.trim()); cur=''; }
+      else cur+=c;
+    }
+    cols.push(cur.trim());
+    rows.push(cols);
+  }
+  return rows;
+}
+
+function parseOrders(csv){
+  const rows = parseCSV(csv);
+  if(rows.length<2) return [];
+  return rows.slice(1).filter(r=>r[0]&&r[0]!=='Order ID').map(r=>({
+    orderId: r[0]||'', customer: r[1]||'', phone: r[2]||'',
+    date: r[3]||'', source: r[4]||'', itemsStr: r[5]||'',
+    subtotal: parseFloat((r[6]||'0').replace(/[₦,]/g,''))||0,
+    delivery: parseFloat((r[7]||'0').replace(/[₦,]/g,''))||0,
+    total:    parseFloat((r[8]||'0').replace(/[₦,]/g,''))||0,
+    cost:     parseFloat((r[9]||'0').replace(/[₦,]/g,''))||0,
+    profit:   parseFloat((r[10]||'0').replace(/[₦,]/g,''))||0,
+    deposit:  parseFloat((r[11]||'0').replace(/[₦,]/g,''))||0,
+    owed:     parseFloat((r[12]||'0').replace(/[₦,]/g,''))||0,
+    status:   r[13]||'unpaid',
+    labourTime: r[14]||'', notes: r[15]||''
+  }));
+}
+
+function parseProducts(csv){
+  const rows = parseCSV(csv);
+  if(rows.length<2) return [];
+  return rows.slice(1).filter(r=>r[0]&&r[0]!=='ID').map(r=>({
+    id: r[0]||'', name: r[1]||'', size: r[2]||'',
+    price: parseFloat((r[3]||'0').replace(/[₦,]/g,''))||0,
+    cost:  parseFloat((r[4]||'0').replace(/[₦,]/g,''))||0,
+    emoji: r[5]||'🌿',
+    trackTime: r[6]==='Yes', labourMins: parseInt(r[7])||0,
+    active: r[8]!=='No'
+  }));
+}
+
+function parseExpenses(csv){
+  const rows = parseCSV(csv);
+  if(rows.length<2) return [];
+  return rows.slice(1).filter(r=>r[0]&&r[0]!=='ID').map(r=>({
+    id: r[0]||'', date: r[1]||'', desc: r[2]||'',
+    amount: parseFloat((r[3]||'0').replace(/[₦,]/g,''))||0,
+    category: r[4]||'Other', notes: r[5]||''
+  }));
+}
+
+// ══ FILTER HELPERS ══
+function getOrders(){
+  const now=new Date(); const tm=now.getMonth(); const ty=now.getFullYear(); const tw=wkNum(now);
+  if(period==='week') return data.orders.filter(o=>{ const d=new Date(o.date); return wkNum(d)===tw&&d.getFullYear()===ty; });
+  if(period==='month') return data.orders.filter(o=>{ const d=new Date(o.date); return d.getMonth()===tm&&d.getFullYear()===ty; });
+  return data.orders;
+}
+
+function getExpenses(){
+  const now=new Date(); const tm=now.getMonth(); const ty=now.getFullYear(); const tw=wkNum(now);
+  if(period==='week') return data.expenses.filter(e=>{ const d=new Date(e.date); return wkNum(d)===tw&&d.getFullYear()===ty; });
+  if(period==='month') return data.expenses.filter(e=>{ const d=new Date(e.date); return d.getMonth()===tm&&d.getFullYear()===ty; });
+  return data.expenses;
 }
 
 // ══ RENDER ALL ══
 function renderAll(){ renderDash(); renderOrders(); renderExpenses(); renderProducts(); }
 
 // ══ DASHBOARD ══
-function setPeriod(p, el){
-  dashPeriod=p;
+function setPeriod(p,el){
+  period=p;
   document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   renderDash();
 }
 
-function filteredOrders(){
-  const now = new Date();
-  if(dashPeriod==='week'){
-    const tw=weekNum(now),ty=now.getFullYear();
-    return data.orders.filter(o=>{ const d=new Date(o.date); return weekNum(d)===tw&&d.getFullYear()===ty; });
-  }
-  if(dashPeriod==='month'){
-    const tm=now.getMonth(),ty=now.getFullYear();
-    return data.orders.filter(o=>{ const d=new Date(o.date); return d.getMonth()===tm&&d.getFullYear()===ty; });
-  }
-  return data.orders;
-}
-
-function filteredExpenses(){
-  const now=new Date();
-  if(dashPeriod==='week'){
-    const tw=weekNum(now),ty=now.getFullYear();
-    return data.expenses.filter(e=>{ const d=new Date(e.date); return weekNum(d)===tw&&d.getFullYear()===ty; });
-  }
-  if(dashPeriod==='month'){
-    const tm=now.getMonth(),ty=now.getFullYear();
-    return data.expenses.filter(e=>{ const d=new Date(e.date); return d.getMonth()===tm&&d.getFullYear()===ty; });
-  }
-  return data.expenses;
-}
-
 function renderDash(){
-  const orders = filteredOrders();
-  const expenses = filteredExpenses();
-  const rev = orders.reduce((s,o)=>s+o.total,0);
-  const cogs = orders.reduce((s,o)=>s+o.cost,0);
-  const gross = orders.reduce((s,o)=>s+o.profit,0);
-  const exp = expenses.reduce((s,e)=>s+e.amount,0);
-  const net = gross-exp;
-  const margin = rev>0?Math.round((net/rev)*100):0;
-  const owed = data.orders.filter(o=>o.owed>0).reduce((s,o)=>s+o.owed,0);
+  const orders=getOrders(); const expenses=getExpenses();
+  const rev=orders.reduce((s,o)=>s+o.total,0);
+  const cogs=orders.reduce((s,o)=>s+o.cost,0);
+  const gross=orders.reduce((s,o)=>s+o.profit,0);
+  const exp=expenses.reduce((s,e)=>s+e.amount,0);
+  const net=gross-exp;
+  const margin=rev>0?Math.round((net/rev)*100):0;
+  const owed=data.orders.filter(o=>o.owed>0).reduce((s,o)=>s+o.owed,0);
 
-  // Pills
-  document.getElementById('dash-pills').innerHTML=`
-    <div class="pill"><div class="pill-l">Revenue</div><div class="pill-v green">${fmtK(rev)}</div></div>
-    <div class="pill"><div class="pill-l">Net Profit</div><div class="pill-v ${net>=0?'green':'red'}">${fmtK(net)}</div></div>
-    <div class="pill"><div class="pill-l">Expenses</div><div class="pill-v amb">${fmtK(exp)}</div></div>
-    <div class="pill"><div class="pill-l">Owed to Me</div><div class="pill-v blue">${fmtK(owed)}</div></div>
-  `;
+  setEl('d-rev',fmtK(rev)); setEl('d-net',fmtK(net));
+  setEl('d-exp',fmtK(exp)); setEl('d-owed',fmtK(owed));
+  const netEl=document.getElementById('d-net');
+  if(netEl) netEl.className='pill-v '+(net>=0?'green':'red');
 
   // P&L
-  document.getElementById('pnl-content').innerHTML=`
+  document.getElementById('pnl').innerHTML=`
     <div class="pnl-row"><span>Revenue</span><span class="mono">₦${fmt(rev)}</span></div>
-    <div class="pnl-row" style="color:var(--red)"><span>Cost of Goods Sold</span><span class="mono">-₦${fmt(cogs)}</span></div>
-    <div class="pnl-row subtotal"><span>Gross Profit</span><span class="mono">₦${fmt(gross)}</span></div>
-    <div class="pnl-row" style="color:var(--red)"><span>Operating Expenses</span><span class="mono">-₦${fmt(exp)}</span></div>
-    <div class="pnl-row net ${net<0?'loss':''}"><span>Net Profit</span><span class="mono">₦${fmt(net)}</span></div>
-    <div class="pnl-row" style="font-size:12px;color:var(--i3);padding-top:8px;"><span>Profit Margin</span><span>${margin}%</span></div>
-    <div class="pnl-row" style="font-size:12px;color:var(--i3);"><span>Orders</span><span>${orders.length}</span></div>
+    <div class="pnl-row" style="color:var(--red)"><span>Cost of Goods</span><span class="mono">−₦${fmt(cogs)}</span></div>
+    <div class="pnl-row pnl-sub"><span>Gross Profit</span><span class="mono">₦${fmt(gross)}</span></div>
+    <div class="pnl-row" style="color:var(--red)"><span>Operating Expenses</span><span class="mono">−₦${fmt(exp)}</span></div>
+    <div class="pnl-row pnl-net ${net<0?'loss':''}"><span>Net Profit</span><span class="mono">₦${fmt(net)}</span></div>
+    <div class="pnl-row" style="font-size:12px;color:var(--i3);padding-top:6px;border-bottom:none;"><span>Profit Margin</span><span>${margin}%</span></div>
+    <div class="pnl-row" style="font-size:12px;color:var(--i3);border-bottom:none;"><span>Orders</span><span>${orders.length}</span></div>
   `;
 
-  // Top products by sales count
-  const prodSales={};
-  orders.forEach(o=>{
-    (o.itemsStr||'').split(', ').forEach(line=>{
-      const m=line.match(/^(\d+)[x×]\s(.+?)\s\(/);
-      if(m) prodSales[m[2]]=(prodSales[m[2]]||0)+parseInt(m[1]);
-    });
-  });
-  const topProds=Object.entries(prodSales).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const maxQty=topProds[0]?topProds[0][1]:1;
-  document.getElementById('top-products').innerHTML = topProds.length
-    ? topProds.map(([name,qty])=>`
-        <div class="bar-row">
-          <div class="bar-label">${name}</div>
-          <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(qty/maxQty*100)}%"></div></div>
-          <div class="bar-val">${qty} sold</div>
-        </div>`).join('')
+  // Top products
+  const ps={};
+  orders.forEach(o=>(o.itemsStr||'').split(', ').forEach(l=>{
+    const m=l.match(/^(\d+)[x×]\s(.+?)\s\(/);
+    if(m) ps[m[2]]=(ps[m[2]]||0)+parseInt(m[1]);
+  }));
+  const top=Object.entries(ps).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const mx=top[0]?top[0][1]:1;
+  document.getElementById('top-prods').innerHTML=top.length
+    ? top.map(([n,q])=>`<div class="bar-row"><div class="bar-label">${n}</div><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(q/mx*100)}%"></div></div><div class="bar-val">${q} sold</div></div>`).join('')
     : '<div style="color:var(--i3);font-size:13px;text-align:center;padding:16px;">No sales data yet</div>';
 }
 
 // ══ ORDERS ══
-function filterOrders(f, el){
+function filterOrders(f,el){
   orderFilter=f;
   document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderOrders();
+  el.classList.add('active'); renderOrders();
 }
 
 function renderOrders(){
@@ -517,44 +498,40 @@ function renderOrders(){
   const owed=data.orders.filter(o=>o.owed>0).reduce((s,o)=>s+o.owed,0);
   const mRev=data.orders.filter(o=>{const d=new Date(o.date);return d.getMonth()===tm&&d.getFullYear()===ty;}).reduce((s,o)=>s+o.total,0);
   setEl('sum-owed','₦'+fmt(owed)); setEl('sum-month','₦'+fmt(mRev));
-  setEl('orders-sub', data.orders.length+' total orders');
+  setEl('orders-sub',data.orders.length+' total orders');
   const un=data.orders.filter(o=>o.owed>0).length;
   const badge=document.getElementById('badge-orders');
   if(badge){badge.style.display=un>0?'flex':'none';badge.textContent=un;}
   const el=document.getElementById('orders-list');
-  if(!orders.length){el.innerHTML=`<div class="empty"><div class="eicon">📋</div><div class="etitle">No orders</div><div class="esub">Enter orders in the Google Sheet — they'll appear here after refresh.</div></div>`;return;}
+  if(!orders.length){el.innerHTML=`<div class="empty"><div class="eicon">📋</div><div class="etitle">No orders</div><div class="esub">Add orders in the Google Sheet → Orders tab. Then tap ↻ Refresh.</div></div>`;return;}
   el.innerHTML=orders.map(o=>{
     const cc=o.owed>0?'chip-amb':'chip-green';
     const ct=o.owed>0?`Owes ₦${fmt(o.owed)}`:'Paid ✓';
     const items=(o.itemsStr||'').split(', ').slice(0,3).join(', ');
-    const tl=o.labourTime?`<span style="font-size:10.5px;background:var(--bll);color:var(--blu);padding:2px 7px;border-radius:20px;font-weight:600;margin-left:6px;">⏱${o.labourTime}</span>`:'';
+    const tl=o.labourTime?`<span style="font-size:10px;background:var(--bll);color:var(--blu);padding:2px 7px;border-radius:20px;font-weight:600;margin-left:6px;">⏱${o.labourTime}</span>`:'';
     return `<div class="ocard" onclick="viewOrder('${o.orderId}')">
       <div class="ocard-top"><div class="oname">${o.customer}${tl}</div><div class="oamt">₦${fmt(o.total)}</div></div>
-      <div class="ometa">${o.orderId} · ${o.date} · ${o.source||''}</div>
+      <div class="ometa">${o.orderId} · ${o.date} · ${o.source}</div>
       <div class="oitems">${items}</div>
       <span class="chip ${cc}">${ct}</span>
     </div>`;
   }).join('');
 }
 
-function viewOrder(orderId){
-  const o=data.orders.find(x=>x.orderId===orderId);
-  if(!o)return;
+function viewOrder(id){
+  const o=data.orders.find(x=>x.orderId===id);if(!o)return;
+  activeOrder=o;
   const cc=o.owed>0?'chip-amb':'chip-green';
-  const ct=o.owed>0?`Owes ₦${fmt(o.owed)}`:'Paid in full ✓';
-  const items=(o.itemsStr||'').split(', ').map((line,i)=>{
-    const m=line.match(/^(\d+)[x×]\s(.+?)$/);
-    return m?`<div class="dirow"><span>${m[1]}× ${m[2]}</span></div>`:`<div class="dirow"><span>${line}</span></div>`;
-  }).join('');
+  const ct=o.owed>0?`Owes ₦${fmt(o.owed)}`:'Paid ✓';
   document.getElementById('order-detail').innerHTML=`
     <div class="dhandle"></div>
     <div style="padding:14px 18px 8px;display:flex;justify-content:space-between;align-items:flex-start;">
-      <div><div style="font-size:19px;font-weight:700;">${o.customer}</div><div style="font-size:12.5px;color:var(--i3);margin-top:2px;">${o.orderId} · ${o.date}</div></div>
+      <div><div style="font-size:19px;font-weight:700;">${o.customer}</div><div style="font-size:12px;color:var(--i3);margin-top:2px;">${o.orderId} · ${o.date}</div></div>
       <span class="chip ${cc}">${ct}</span>
     </div>
     <div class="dsect">
       <div class="dlabel">Items${o.labourTime?' · Labour: ⏱'+o.labourTime:''}</div>
-      ${items}
+      ${(o.itemsStr||'').split(', ').map(l=>`<div class="dirow"><span>${l}</span></div>`).join('')}
       ${o.delivery>0?`<div class="dirow"><span style="color:var(--i3);">Delivery</span><span class="mono">₦${fmt(o.delivery)}</span></div>`:''}
       <div style="display:flex;justify-content:space-between;padding:10px 0 0;font-weight:700;font-size:15px;"><span>Total</span><span class="mono" style="color:var(--gm);">₦${fmt(o.total)}</span></div>
       ${o.deposit>0?`<div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--i3);padding:3px 0;"><span>Deposit paid</span><span class="mono">₦${fmt(o.deposit)}</span></div>`:''}
@@ -562,58 +539,33 @@ function viewOrder(orderId){
     ${o.notes?`<div class="dsect"><div class="dlabel">Notes</div><div class="dvalue">${o.notes}</div></div>`:''}
     <div class="dsect"><div class="dlabel">Profit on this order</div><div class="dvalue" style="color:var(--gm);">₦${fmt(o.profit)}</div></div>
     <div class="arow">
-      <button class="abtn ab-wa" onclick="waCustomer('${o.orderId}')">💬 WhatsApp</button>
+      ${o.phone||wa?`<button class="abtn ab-wa" onclick="waCustomer('${o.orderId}')">💬 WhatsApp</button>`:''}
       <button class="abtn ab-green" onclick="showOrderSheet('${o.orderId}')">📄 Order Sheet</button>
       <button class="abtn ab-amb" onclick="showInvoice('${o.orderId}')">🧾 Invoice</button>
-    </div>
-    ${o.owed>0?`<div class="arow" style="padding-top:0;"><button class="abtn ab-blue" style="width:100%;" onclick="markPaidInSheet('${o.orderId}')">✓ Mark as Paid (updates Sheet)</button></div>`:''}
-  `;
+    </div>`;
   openDrawer('ov-order');
 }
 
-function waCustomer(orderId){
-  const o=data.orders.find(x=>x.orderId===orderId);
-  if(!o)return;
+function waCustomer(id){
+  const o=data.orders.find(x=>x.orderId===id);if(!o)return;
   const lines=(o.itemsStr||'').split(', ').map(l=>'• '+l).join('\n');
-  const msg=`Hello ${o.customer}! 🌿\n\nThank you for your White Oak Foods order.\n\n*${o.orderId}*\n\n${lines}${o.delivery>0?'\n• Delivery — ₦'+fmt(o.delivery):''}\n\n*Total: ₦${fmt(o.total)}*\n${o.owed>0?`Balance due: ₦${fmt(o.owed)}`:'✓ Fully paid'}\n\n${o.notes||''}\n\nThank you! 🙏`;
-  const phone=(o.phone||cfg.wa||'').replace(/\D/g,'');
+  const msg=`Hello ${o.customer}! 🌿\n\nThank you for your White Oak Foods order.\n\n*${o.orderId}*\n\n${lines}${o.delivery>0?'\n• Delivery — ₦'+fmt(o.delivery):''}\n\n*Total: ₦${fmt(o.total)}*\n${o.owed>0?'Balance due: ₦'+fmt(o.owed):'✓ Fully paid'}\n\n${o.notes||''}\n\nThank you! 🙏`;
+  const phone=(o.phone||wa||'').replace(/\D/g,'');
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-function markPaidInSheet(orderId){
-  const o=data.orders.find(x=>x.orderId===orderId);
-  if(!o||!cfg.url||!cfg.key){toast('Not connected to Sheet');return;}
-  if(!confirm('Mark '+orderId+' as paid in the Google Sheet?'))return;
-  // POST to sheet
-  fetch(cfg.url,{
-    method:'POST',
-    body:JSON.stringify({key:cfg.key,action:'updateOrder',data:{orderId,status:'paid',owed:0,deposit:o.total}}),
-    headers:{'Content-Type':'text/plain'}
-  }).then(()=>{
-    o.status='paid';o.owed=0;o.deposit=o.total;
-    saveLocal();closeDrawer('ov-order');renderOrders();renderDash();
-    toast('Marked as paid ✓ — reload to confirm');
-  }).catch(()=>{
-    // Try JSONP fallback
-    o.status='paid';o.owed=0;o.deposit=o.total;
-    saveLocal();closeDrawer('ov-order');renderOrders();renderDash();
-    toast('Updated locally — sync Sheet manually');
-  });
-}
-
 // ══ ORDER SHEET ══
-function showOrderSheet(orderId){
-  const o=data.orders.find(x=>x.orderId===orderId);
-  if(!o)return;
-  activeInvoiceOrder=o;
+function showOrderSheet(id){
+  const o=data.orders.find(x=>x.orderId===id);if(!o)return;
+  activeOrder=o;
   closeDrawer('ov-order');
-  document.getElementById('inv-drawer-title').textContent='Order Sheet — '+o.orderId;
-  const items=(o.itemsStr||'').split(', ').map((line,i)=>`<div class="inv-irow" style="background:${i%2===0?'var(--sand)':'var(--wh)'}"><span>${line}</span><span class="mono"></span></div>`).join('');
-  document.getElementById('inv-content').innerHTML=`
+  document.getElementById('inv-title').textContent='Order Sheet — '+o.orderId;
+  const items=(o.itemsStr||'').split(', ').map((l,i)=>`<div class="inv-irow" style="background:${i%2===0?'var(--sand)':'var(--wh)'}"><span>${l}</span></div>`).join('');
+  document.getElementById('inv-body').innerHTML=`
     <div class="inv-wrap">
       <div class="inv-head">
         <div><div style="font-size:14px;font-weight:700;">WHITE OAK FOODS</div><div style="font-size:10px;opacity:.6;margin-top:2px;">Natural & Processed Foods · Lagos</div></div>
-        <div style="text-align:right;"><div style="font-size:11px;opacity:.5;">ORDER SHEET</div><div style="font-size:13px;font-weight:700;margin-top:2px;">${o.orderId}</div></div>
+        <div style="text-align:right;"><div style="font-size:10px;opacity:.5;">ORDER SHEET</div><div style="font-size:13px;font-weight:700;margin-top:2px;">${o.orderId}</div></div>
       </div>
       <div class="inv-row"><span style="color:var(--i3);">Customer</span><span style="font-weight:600;">${o.customer}</span></div>
       <div class="inv-row"><span style="color:var(--i3);">Phone</span><span>${o.phone||'—'}</span></div>
@@ -623,104 +575,95 @@ function showOrderSheet(orderId){
       ${items}
       ${o.delivery>0?`<div class="inv-row"><span style="color:var(--i3);">Delivery</span><span class="mono">₦${fmt(o.delivery)}</span></div>`:''}
       ${o.labourTime?`<div class="inv-row" style="background:var(--bll);color:var(--blu);"><span>⏱ Labour Time</span><span style="font-weight:600;">${o.labourTime}</span></div>`:''}
-      <div class="inv-row inv-total"><span>ORDER TOTAL</span><span class="mono">₦${fmt(o.total)}</span></div>
+      <div class="inv-row inv-total"><span>TOTAL</span><span class="mono">₦${fmt(o.total)}</span></div>
       ${o.deposit>0?`<div class="inv-row"><span style="color:var(--i3);">Deposit paid</span><span class="mono">₦${fmt(o.deposit)}</span></div>`:''}
-      ${o.owed>0?`<div class="inv-row inv-owed"><span>Balance Due</span><span class="mono">₦${fmt(o.owed)}</span></div>`:`<div class="inv-row" style="background:var(--gll);font-weight:700;"><span style="color:var(--gm);">✓ Fully Paid</span><span></span></div>`}
+      ${o.owed>0?`<div class="inv-row inv-owed"><span>Balance Due</span><span class="mono">₦${fmt(o.owed)}</span></div>`:`<div class="inv-row" style="background:var(--gll);font-weight:700;color:var(--gm);">✓ Fully Paid</div>`}
       ${o.notes?`<div class="inv-row"><span style="color:var(--i3);">Notes</span><span style="font-size:12px;">${o.notes}</span></div>`:''}
     </div>`;
-  openDrawer('ov-invoice');
+  openDrawer('ov-inv');
 }
 
 // ══ INVOICE ══
-function showInvoice(orderId){
-  const o=data.orders.find(x=>x.orderId===orderId);
-  if(!o)return;
-  activeInvoiceOrder=o;
+function showInvoice(id){
+  const o=data.orders.find(x=>x.orderId===id);if(!o)return;
+  activeOrder=o;
   closeDrawer('ov-order');
   const invNum='INV-'+o.orderId.replace('WO-','');
-  document.getElementById('inv-drawer-title').textContent='Invoice — '+invNum;
-  const items=(o.itemsStr||'').split(', ').map((line,i)=>`<div class="inv-irow" style="background:${i%2===0?'var(--sand)':'var(--wh)'}"><span>${line}</span><span class="mono"></span></div>`).join('');
   const due=new Date(o.date); due.setDate(due.getDate()+7);
-  document.getElementById('inv-content').innerHTML=`
+  document.getElementById('inv-title').textContent='Invoice — '+invNum;
+  const items=(o.itemsStr||'').split(', ').map((l,i)=>`<div class="inv-irow" style="background:${i%2===0?'var(--sand)':'var(--wh)'}"><span>${l}</span></div>`).join('');
+  document.getElementById('inv-body').innerHTML=`
     <div class="inv-wrap">
       <div class="inv-head">
         <div><div style="font-size:14px;font-weight:700;">WHITE OAK FOODS</div><div style="font-size:10px;opacity:.6;margin-top:2px;">Natural & Processed Foods · Lagos</div></div>
-        <div style="text-align:right;"><div style="font-size:18px;font-weight:700;opacity:.4;letter-spacing:-1px;">INVOICE</div><div style="font-size:11px;font-family:'DM Mono',monospace;margin-top:2px;">${invNum}</div></div>
+        <div style="text-align:right;"><div style="font-size:18px;font-weight:700;opacity:.35;letter-spacing:-1px;">INVOICE</div><div style="font-size:11px;font-family:'DM Mono',monospace;margin-top:2px;">${invNum}</div></div>
       </div>
-      <div class="inv-row"><span style="color:var(--i3);">Bill To</span><span style="font-weight:600;">${o.customer}${o.phone?'<br><span style="font-size:11px;color:var(--i3);font-weight:400;">'+o.phone+'</span>':''}</span></div>
-      <div class="inv-row"><span style="color:var(--i3);">Invoice Date</span><span>${o.date}</span></div>
-      <div class="inv-row"><span style="color:var(--i3);">Due Date</span><span>${due.toLocaleDateString()}</span></div>
+      <div class="inv-row"><span style="color:var(--i3);">Bill To</span><span style="font-weight:600;">${o.customer}${o.phone?'<br><span style="font-weight:400;font-size:11px;color:var(--i3);">'+o.phone+'</span>':''}</span></div>
+      <div class="inv-row"><span style="color:var(--i3);">Date</span><span>${o.date}</span></div>
+      <div class="inv-row"><span style="color:var(--i3);">Due</span><span>${due.toLocaleDateString()}</span></div>
       <div class="inv-ihead"><span>Description</span><span>Amount</span></div>
       ${items}
       ${o.delivery>0?`<div class="inv-irow"><span style="color:var(--i3);">Delivery</span><span class="mono">₦${fmt(o.delivery)}</span></div>`:''}
-      ${o.labourTime?`<div class="inv-irow" style="color:var(--blu);font-size:12px;"><span>⏱ Production time: ${o.labourTime}</span><span></span></div>`:''}
+      ${o.labourTime?`<div class="inv-irow" style="color:var(--blu);font-size:12px;"><span>⏱ Production time: ${o.labourTime}</span></div>`:''}
       <div class="inv-row inv-total"><span>TOTAL DUE</span><span class="mono">₦${fmt(o.total)}</span></div>
-      ${o.owed>0?`<div class="inv-row inv-owed"><span>Balance Remaining</span><span class="mono">₦${fmt(o.owed)}</span></div>`:`<div class="inv-row" style="background:var(--gll);"><span style="color:var(--gm);font-weight:600;">✓ Paid in Full</span><span></span></div>`}
+      ${o.owed>0?`<div class="inv-row inv-owed"><span>Balance</span><span class="mono">₦${fmt(o.owed)}</span></div>`:`<div class="inv-row" style="background:var(--gll);color:var(--gm);font-weight:700;"><span>✓ Paid in Full</span></div>`}
       <div style="padding:10px 14px;text-align:center;font-size:11px;color:var(--i3);border-top:1px dashed var(--bdr);">Thank you for choosing White Oak Foods 🌿</div>
     </div>`;
-  openDrawer('ov-invoice');
+  openDrawer('ov-inv');
 }
 
-function shareInvoiceWA(){
-  const o=activeInvoiceOrder;
-  if(!o)return;
+function shareWA(){
+  const o=activeOrder;if(!o)return;
   const invNum='INV-'+o.orderId.replace('WO-','');
   const lines=(o.itemsStr||'').split(', ').map(l=>'• '+l).join('\n');
-  const msg=`*WHITE OAK FOODS*\n🧾 ${invNum}\n\nBill To: ${o.customer}${o.phone?'\n'+o.phone:''}\nDate: ${o.date}\n\n${lines}${o.delivery>0?'\n• Delivery — ₦'+fmt(o.delivery):''}\n\n*TOTAL: ₦${fmt(o.total)}*\n${o.owed>0?'Balance due: ₦'+fmt(o.owed):'✓ Paid in Full'}\n\n${o.labourTime?'⏱ Production time: '+o.labourTime+'\n':''}\nThank you! 🌿`;
-  const phone=(o.phone||cfg.wa||'').replace(/\D/g,'');
+  const isInv=document.getElementById('inv-title').textContent.includes('INV');
+  const header=isInv?`🧾 *${invNum}*`:`📄 *Order Sheet — ${o.orderId}*`;
+  const msg=`*WHITE OAK FOODS* 🌿\n${header}\n\nCustomer: ${o.customer}${o.phone?'\n'+o.phone:''}\nDate: ${o.date}\n\n${lines}${o.delivery>0?'\n• Delivery — ₦'+fmt(o.delivery):''}\n\n*TOTAL: ₦${fmt(o.total)}*\n${o.owed>0?'Balance due: ₦'+fmt(o.owed):'✓ Paid in Full'}${o.labourTime?'\n⏱ Labour: '+o.labourTime:''}\n\nThank you! 🌿`;
+  const phone=(o.phone||wa||'').replace(/\D/g,'');
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 // ══ EXPENSES ══
-const catIcons={'Raw Materials':'🌿','Processing / Labour':'⚙️','Packaging':'📦','Transport / Delivery':'🚛','Utilities':'💡','Equipment':'🔧','Marketing':'📣','Other':'💸','raw-material':'🌿','processing':'⚙️','packaging':'📦','transport':'🚛','utilities':'💡','equipment':'🔧','marketing':'📣','other':'💸'};
+const CAT_ICONS={'Raw Materials':'🌿','Processing / Labour':'⚙️','Packaging':'📦','Transport / Delivery':'🚛','Utilities':'💡','Equipment':'🔧','Marketing':'📣','Other':'💸','raw-material':'🌿','processing':'⚙️','packaging':'📦','transport':'🚛','utilities':'💡','equipment':'🔧','marketing':'📣','other':'💸'};
 
 function renderExpenses(){
   const now=new Date(); const tm=now.getMonth(); const ty=now.getFullYear();
   const mExp=data.expenses.filter(e=>{const d=new Date(e.date);return d.getMonth()===tm&&d.getFullYear()===ty;});
-  const mTotal=mExp.reduce((s,e)=>s+e.amount,0);
-  const aTotal=data.expenses.reduce((s,e)=>s+e.amount,0);
+  const mT=mExp.reduce((s,e)=>s+e.amount,0);
+  const aT=data.expenses.reduce((s,e)=>s+e.amount,0);
+  setEl('exp-month','₦'+fmt(mT)); setEl('exp-all','₦'+fmt(aT));
 
-  document.getElementById('exp-pills').innerHTML=`
-    <div class="pill"><div class="pill-l">This Month</div><div class="pill-v red">₦${fmt(mTotal)}</div></div>
-    <div class="pill"><div class="pill-l">All Time</div><div class="pill-v amb">₦${fmt(aTotal)}</div></div>
-  `;
-
-  const renderCats=(expenses,elId)=>{
-    const byCat={};
-    expenses.forEach(e=>{byCat[e.category]=(byCat[e.category]||0)+e.amount;});
-    const total=Object.values(byCat).reduce((s,v)=>s+v,0);
+  const renderCats=(exps,elId)=>{
+    const bc={};exps.forEach(e=>{bc[e.category]=(bc[e.category]||0)+e.amount;});
+    const total=Object.values(bc).reduce((s,v)=>s+v,0);
     const el=document.getElementById(elId);
     if(!total){el.innerHTML='<div style="color:var(--i3);font-size:13px;text-align:center;padding:12px;">No data</div>';return;}
-    el.innerHTML=Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
+    el.innerHTML=Object.entries(bc).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
       <div class="bar-row">
-        <div class="bar-label">${catIcons[cat]||'💸'} ${cat}</div>
+        <div class="bar-label">${CAT_ICONS[cat]||'💸'} ${cat}</div>
         <div class="bar-wrap"><div class="bar-fill red" style="width:${Math.round(amt/total*100)}%"></div></div>
         <div class="bar-val">₦${fmt(amt)}</div>
       </div>`).join('');
   };
+  renderCats(mExp,'exp-cats-m');
+  renderCats(data.expenses,'exp-cats-a');
 
-  renderCats(mExp,'exp-cats-month');
-  renderCats(data.expenses,'exp-cats-all');
-
-  const expEl=document.getElementById('exp-list');
+  const el=document.getElementById('exp-list');
   const recent=[...data.expenses].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,30);
-  if(!recent.length){expEl.innerHTML='<div class="empty"><div class="eicon">💸</div><div class="etitle">No expenses yet</div><div class="esub">Add expenses in the Google Sheet</div></div>';return;}
-  expEl.innerHTML=recent.map(e=>`
+  if(!recent.length){el.innerHTML='<div class="empty"><div class="eicon">💸</div><div class="etitle">No expenses yet</div><div class="esub">Add expenses in the Google Sheet → Expenses tab</div></div>';return;}
+  el.innerHTML=recent.map(e=>`
     <div style="background:var(--wh);border-bottom:1px solid var(--bdr);padding:12px 18px;display:flex;align-items:center;gap:12px;">
-      <div style="width:38px;height:38px;border-radius:10px;background:var(--rl);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">${catIcons[e.category]||'💸'}</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-size:13.5px;font-weight:600;">${e.desc}</div>
-        <div style="font-size:11.5px;color:var(--i3);">${e.date} · ${e.category}</div>
-      </div>
-      <div class="mono" style="color:var(--red);font-size:14px;flex-shrink:0;">-₦${fmt(e.amount)}</div>
+      <div style="width:38px;height:38px;border-radius:10px;background:var(--rl);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">${CAT_ICONS[e.category]||'💸'}</div>
+      <div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:600;">${e.desc}</div><div style="font-size:11.5px;color:var(--i3);">${e.date} · ${e.category}</div></div>
+      <div class="mono" style="color:var(--red);font-size:14px;flex-shrink:0;">−₦${fmt(e.amount)}</div>
     </div>`).join('');
 }
 
 // ══ PRODUCTS ══
 function renderProducts(){
   const el=document.getElementById('products-list');
-  setEl('prod-sub', data.products.length+' products');
-  if(!data.products.length){el.innerHTML='<div class="empty"><div class="eicon">🌿</div><div class="etitle">No products yet</div><div class="esub">Add products in the Google Sheet Products tab</div></div>';return;}
+  setEl('prod-sub',data.products.length+' products');
+  if(!data.products.length){el.innerHTML='<div class="empty"><div class="eicon">🌿</div><div class="etitle">No products</div><div class="esub">Add products in the Google Sheet → Products tab. Then tap ↻ Refresh.</div></div>';return;}
   const sorted=[...data.products].sort((a,b)=>{const ma=a.price>0?(a.price-a.cost)/a.price:0;const mb=b.price>0?(b.price-b.cost)/b.price:0;return mb-ma;});
   el.innerHTML=sorted.map(p=>{
     const m=p.price>0?Math.round(((p.price-p.cost)/p.price)*100):0;
@@ -736,25 +679,19 @@ function renderProducts(){
 
 // ══ SETTINGS ══
 function renderSettings(){
-  if(cfg.url) document.getElementById('cfg-url').value=cfg.url;
-  if(cfg.key) document.getElementById('cfg-key').value=cfg.key;
-  if(cfg.wa) document.getElementById('cfg-wa').value=cfg.wa;
+  const el=document.getElementById('cfg-wa');
+  if(el) el.value=wa;
 }
 
-function saveSettings(){
-  cfg.url=(document.getElementById('cfg-url')?.value||'').trim();
-  cfg.key=(document.getElementById('cfg-key')?.value||'').trim();
-  cfg.wa=(document.getElementById('cfg-wa')?.value||'').trim();
-  if(!cfg.url||!cfg.key){toast('Enter URL and secret key');return;}
-  saveLocal();
-  toast('Saved — loading data…');
-  loadFromSheet();
+function saveWA(){
+  wa=(document.getElementById('cfg-wa')?.value||'').trim();
+  saveLocal(); toast('Saved ✓');
 }
 
 function exportCache(){
   const b=new Blob([JSON.stringify({data,exported:new Date().toISOString()},null,2)],{type:'application/json'});
-  const u=URL.createObjectURL(b);const a=document.createElement('a');
-  a.href=u;a.download='whiteoak-cache-'+today()+'.json';a.click();URL.revokeObjectURL(u);
+  const u=URL.createObjectURL(b); const a=document.createElement('a');
+  a.href=u; a.download='whiteoak-'+today()+'.json'; a.click(); URL.revokeObjectURL(u);
   toast('Exported ✓');
 }
 
@@ -763,18 +700,16 @@ function updateOnline(){
   const p=document.getElementById('offline-pill');
   if(p){ navigator.onLine?p.classList.remove('show'):p.classList.add('show'); }
 }
-window.addEventListener('online', updateOnline);
-window.addEventListener('offline', updateOnline);
+window.addEventListener('online',updateOnline);
+window.addEventListener('offline',updateOnline);
 
 // ══ INIT ══
 loadLocal();
 updateOnline();
 renderAll();
-if(cfg.url && cfg.key && navigator.onLine){
-  setTimeout(loadFromSheet, 800);
-} else if(!cfg.url){
-  setEl('last-updated','Set up connection in Settings ⚙');
-}
+// Auto-load fresh data on open
+if(navigator.onLine){ setTimeout(loadData, 600); }
+else { setEl('last-updated','Offline — showing saved data'); }
 </script>
 </body>
 </html>
