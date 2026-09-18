@@ -264,7 +264,8 @@ textarea{resize:none;min-height:65px}
 <script>
 // ══ CONFIG ══
 const SHEET_ID = '1GtsCOjG8nOfVcpZDhQ98Gf4sHenLrLVh7wZaR6hnC7w';
-const BASE = 'https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&sheet=';
+const PROXY = 'https://corsproxy.io/?';
+const BASE = PROXY + encodeURIComponent('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&sheet=');
 const KEY = 'wof_v3';
 
 // ══ STATE ══
@@ -351,10 +352,15 @@ async function loadData(){
 }
 
 async function fetchCSV(sheetName){
-  const url = BASE + encodeURIComponent(sheetName);
-  const res = await fetch(url, { cache: 'no-store' });
-  if(!res.ok) throw new Error('Failed to fetch ' + sheetName);
-  return res.text();
+  const url = BASE + encodeURIComponent(sheetName).replace(/%20/g,'+');
+  const res = await fetch(url, {
+    cache: 'no-store',
+    headers: { 'Accept': 'text/csv, text/plain, */*' }
+  });
+  // 200 or redirect both count as success for Google Sheets
+  const text = await res.text();
+  if(!text || text.trim().startsWith('<!')) throw new Error('No data for ' + sheetName);
+  return text;
 }
 
 // ══ CSV PARSERS ══
