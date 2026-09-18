@@ -263,9 +263,9 @@ textarea{resize:none;min-height:65px}
 
 <script>
 // ══ CONFIG ══
-const SHEET_ID = '1GtsCOjG8nOfVcpZDhQ98Gf4sHenLrLVh7wZaR6hnC7w';
-const PROXY = 'https://corsproxy.io/?';
-const BASE = PROXY + encodeURIComponent('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&sheet=');
+// ── CONFIGURE THESE TWO VALUES ──
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzgzwcX9gwctaL3UY9Ra55BSu62lJcr1vSiuejEXbutk9aY8QCAVGI0MWbIuQgrHM9/exec';
+const SECRET_KEY = 'WhiteOak2026'; // must match what is in Apps Script
 const KEY = 'wof_v3';
 
 // ══ STATE ══
@@ -322,21 +322,22 @@ async function loadData(){
   }
 
   try{
-    // Fetch all three sheets in parallel
-    const [ordersCSV, productsCSV, expensesCSV] = await Promise.all([
-      fetchCSV('Orders'),
-      fetchCSV('Products'),
-      fetchCSV('Expenses')
-    ]);
+    // Simple fetch — same pattern as working dashboards
+    const url = SCRIPT_URL + '?key=' + encodeURIComponent(SECRET_KEY);
+    const res = await fetch(url, { redirect: 'follow' });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
 
-    data.orders   = parseOrders(ordersCSV);
-    data.products = parseProducts(productsCSV);
-    data.expenses = parseExpenses(expensesCSV);
+    if(!json.ok) throw new Error(json.error || 'Script error');
+
+    data.orders   = json.orders   || [];
+    data.products = json.products || [];
+    data.expenses = json.expenses || [];
 
     saveLocal();
     const now = new Date();
     setEl('last-updated', 'Updated ' + now.toLocaleTimeString());
-    setEl('sync-status', 'Last synced: ' + now.toLocaleString());
+    setEl('sync-status',  'Last synced: ' + now.toLocaleString());
     bar.className='lbar done';
     setTimeout(()=>bar.className='lbar', 400);
     btn.textContent='↻ Refresh'; btn.disabled=false;
@@ -345,83 +346,10 @@ async function loadData(){
   } catch(err){
     bar.className='lbar';
     btn.textContent='↻ Refresh'; btn.disabled=false;
-    toast('Could not load — using cached data');
+    toast('Could not load — check connection');
+    console.error('Load error:', err.message);
     renderAll();
-    console.error(err);
   }
-}
-
-async function fetchCSV(sheetName){
-  const url = BASE + encodeURIComponent(sheetName).replace(/%20/g,'+');
-  const res = await fetch(url, {
-    cache: 'no-store',
-    headers: { 'Accept': 'text/csv, text/plain, */*' }
-  });
-  // 200 or redirect both count as success for Google Sheets
-  const text = await res.text();
-  if(!text || text.trim().startsWith('<!')) throw new Error('No data for ' + sheetName);
-  return text;
-}
-
-// ══ CSV PARSERS ══
-function parseCSV(text){
-  const rows = [];
-  const lines = text.split('\n');
-  for(let line of lines){
-    if(!line.trim()) continue;
-    const cols = [];
-    let cur='', inQ=false;
-    for(let i=0;i<line.length;i++){
-      const c=line[i];
-      if(c==='"'){ inQ=!inQ; }
-      else if(c===','&&!inQ){ cols.push(cur.trim()); cur=''; }
-      else cur+=c;
-    }
-    cols.push(cur.trim());
-    rows.push(cols);
-  }
-  return rows;
-}
-
-function parseOrders(csv){
-  const rows = parseCSV(csv);
-  if(rows.length<2) return [];
-  return rows.slice(1).filter(r=>r[0]&&r[0]!=='Order ID').map(r=>({
-    orderId: r[0]||'', customer: r[1]||'', phone: r[2]||'',
-    date: r[3]||'', source: r[4]||'', itemsStr: r[5]||'',
-    subtotal: parseFloat((r[6]||'0').replace(/[₦,]/g,''))||0,
-    delivery: parseFloat((r[7]||'0').replace(/[₦,]/g,''))||0,
-    total:    parseFloat((r[8]||'0').replace(/[₦,]/g,''))||0,
-    cost:     parseFloat((r[9]||'0').replace(/[₦,]/g,''))||0,
-    profit:   parseFloat((r[10]||'0').replace(/[₦,]/g,''))||0,
-    deposit:  parseFloat((r[11]||'0').replace(/[₦,]/g,''))||0,
-    owed:     parseFloat((r[12]||'0').replace(/[₦,]/g,''))||0,
-    status:   r[13]||'unpaid',
-    labourTime: r[14]||'', notes: r[15]||''
-  }));
-}
-
-function parseProducts(csv){
-  const rows = parseCSV(csv);
-  if(rows.length<2) return [];
-  return rows.slice(1).filter(r=>r[0]&&r[0]!=='ID').map(r=>({
-    id: r[0]||'', name: r[1]||'', size: r[2]||'',
-    price: parseFloat((r[3]||'0').replace(/[₦,]/g,''))||0,
-    cost:  parseFloat((r[4]||'0').replace(/[₦,]/g,''))||0,
-    emoji: r[5]||'🌿',
-    trackTime: r[6]==='Yes', labourMins: parseInt(r[7])||0,
-    active: r[8]!=='No'
-  }));
-}
-
-function parseExpenses(csv){
-  const rows = parseCSV(csv);
-  if(rows.length<2) return [];
-  return rows.slice(1).filter(r=>r[0]&&r[0]!=='ID').map(r=>({
-    id: r[0]||'', date: r[1]||'', desc: r[2]||'',
-    amount: parseFloat((r[3]||'0').replace(/[₦,]/g,''))||0,
-    category: r[4]||'Other', notes: r[5]||''
-  }));
 }
 
 // ══ FILTER HELPERS ══
