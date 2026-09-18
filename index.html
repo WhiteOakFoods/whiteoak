@@ -131,6 +131,74 @@ textarea{resize:none;min-height:65px}
 .etitle{font-size:15px;font-weight:600;color:var(--i2);margin-bottom:5px}
 .esub{font-size:12.5px;color:var(--i3);line-height:1.5}
 .s16{height:16px}
+/* ── SCRIPTURE BANNER ── */
+.scripture-banner{
+  background:linear-gradient(135deg,#0f2318 0%,#1a3a2a 50%,#0f2318 100%);
+  padding:12px 18px;
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+  cursor:pointer;
+}
+.scripture-banner::before{
+  content:'';
+  position:absolute;
+  top:-30px;right:-30px;
+  width:120px;height:120px;
+  background:rgba(255,255,255,0.03);
+  border-radius:50%;
+}
+.scripture-banner::after{
+  content:'';
+  position:absolute;
+  bottom:-40px;left:-20px;
+  width:100px;height:100px;
+  background:rgba(74,148,99,0.08);
+  border-radius:50%;
+}
+.scripture-text{
+  font-size:12px;
+  color:rgba(255,255,255,0.9);
+  line-height:1.5;
+  font-style:italic;
+  letter-spacing:0.1px;
+  position:relative;
+  z-index:1;
+}
+.scripture-ref{
+  font-size:10px;
+  color:var(--gl);
+  font-weight:700;
+  margin-top:4px;
+  font-style:normal;
+  letter-spacing:0.5px;
+  position:relative;
+  z-index:1;
+}
+.scripture-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:6px;
+  position:relative;
+  z-index:1;
+}
+.scripture-dots{
+  display:flex;
+  gap:4px;
+}
+.sdot{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  transition:background .3s;
+}
+.sdot.active{background:var(--gl);}
+.scripture-tap{
+  font-size:10px;
+  color:rgba(255,255,255,0.3);
+  letter-spacing:0.5px;
+}
 /* connecting screen */
 .connect-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:32px;text-align:center}
 .connect-logo{font-size:56px;margin-bottom:16px}
@@ -147,6 +215,16 @@ textarea{resize:none;min-height:65px}
       <button class="refresh-btn" id="refresh-btn" onclick="loadData()">↻ Refresh</button>
     </div>
     <div class="lbar" id="lbar"></div>
+  </div>
+
+  <!-- SCRIPTURE BANNER -->
+  <div class="scripture-banner" onclick="nextScripture()">
+    <div class="scripture-text" id="scripture-text"></div>
+    <div class="scripture-ref" id="scripture-ref"></div>
+    <div class="scripture-nav">
+      <div class="scripture-dots" id="scripture-dots"></div>
+      <div class="scripture-tap">tap to change</div>
+    </div>
   </div>
 
   <div class="screens">
@@ -179,7 +257,10 @@ textarea{resize:none;min-height:65px}
 
     <!-- ORDERS -->
     <div class="screen" id="screen-orders">
-      <div class="shead"><div><div class="stitle">Orders</div><div class="ssub" id="orders-sub">—</div></div></div>
+      <div class="shead">
+        <div><div class="stitle">Orders</div><div class="ssub" id="orders-sub">—</div></div>
+        <button onclick="openNewOrder()" style="background:var(--g);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;">+ New</button>
+      </div>
       <div class="pills" style="padding-bottom:8px;">
         <div class="pill"><div class="pill-l">Owed to me</div><div class="pill-v amb" id="sum-owed">₦0</div></div>
         <div class="pill"><div class="pill-l">This month</div><div class="pill-v green" id="sum-month">₦0</div></div>
@@ -257,6 +338,47 @@ textarea{resize:none;min-height:65px}
     <div class="arow">
       <button class="abtn ab-wa" onclick="shareWA()">💬 Share via WhatsApp</button>
       <button class="abtn ab-green" onclick="closeDrawer('ov-inv')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW ORDER DRAWER -->
+<div class="overlay" id="ov-new-order" onclick="closeIfOv(event,'ov-new-order')">
+  <div class="drawer">
+    <div class="dhandle"></div>
+    <div class="dtitle">New Order</div>
+    <div class="fbody">
+      <div class="fgroup"><label class="flabel">Customer Name</label><input type="text" id="no-name" placeholder="e.g. Amaka" autocomplete="off"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fgroup"><label class="flabel">Phone</label><input type="tel" id="no-phone" placeholder="+234…"></div>
+        <div class="fgroup"><label class="flabel">Date</label><input type="date" id="no-date"></div>
+      </div>
+      <div class="fgroup"><label class="flabel">Source</label>
+        <select id="no-source"><option>WhatsApp</option><option>Instagram</option><option>Direct</option><option>Facebook</option><option>Referral</option></select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">Items</label>
+        <div id="no-picker" style="background:var(--wh);border:1.5px solid var(--bdr);border-radius:10px;overflow:hidden;margin-bottom:8px;"></div>
+        <div style="font-size:11.5px;color:var(--i3);">Tap + / − to add items</div>
+      </div>
+      <div class="fgroup"><label class="flabel">Delivery Fee (₦)</label><input type="number" id="no-delivery" value="0" oninput="updateNoTotal()"></div>
+      <div style="background:var(--g);color:#fff;padding:12px 16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;opacity:.7;">Order Total</span>
+        <span style="font-family:'DM Mono',monospace;font-size:20px;" id="no-total-disp">₦0</span>
+      </div>
+      <div class="fgroup"><label class="flabel">Payment</label>
+        <select id="no-paid" onchange="toggleNoDeposit()">
+          <option value="unpaid">Not paid yet</option>
+          <option value="partial">Deposit paid</option>
+          <option value="paid">Fully paid</option>
+        </select>
+      </div>
+      <div class="fgroup" id="no-deposit-wrap" style="display:none;"><label class="flabel">Deposit Amount (₦)</label><input type="number" id="no-deposit" placeholder="0" oninput="updateNoTotal()"></div>
+      <div class="fgroup"><label class="flabel">Notes / Address</label><textarea id="no-notes" placeholder="Delivery address, special requests…"></textarea></div>
+    </div>
+    <div style="padding:0 18px;">
+      <button class="sbtn" onclick="saveNewOrder()">✓ Save Order</button>
+      <button style="width:100%;background:transparent;color:var(--i3);border:1.5px solid var(--bdr);border-radius:12px;padding:12px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:16px;" onclick="closeDrawer('ov-new-order')">Cancel</button>
     </div>
   </div>
 </div>
@@ -637,10 +759,186 @@ function updateOnline(){
 window.addEventListener('online',updateOnline);
 window.addEventListener('offline',updateOnline);
 
+// ══ SCRIPTURES ══
+const SCRIPTURES = [
+  { text: "For I know the plans I have for you, plans to prosper you and not to harm you, plans to give you hope and a future.", ref: "Jeremiah 29:11" },
+  { text: "She is clothed with strength and dignity, and she laughs without fear of the future.", ref: "Proverbs 31:25" },
+  { text: "The Lord will open the heavens, the storehouse of his bounty, to send rain on your land in season and to bless all the work of your hands.", ref: "Deuteronomy 28:12" },
+  { text: "Commit to the Lord whatever you do, and he will establish your plans.", ref: "Proverbs 16:3" },
+  { text: "I can do all things through Christ who strengthens me.", ref: "Philippians 4:13" },
+  { text: "Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", ref: "3 John 1:2" },
+  { text: "The blessing of the Lord brings wealth, without painful toil for it.", ref: "Proverbs 10:22" },
+  { text: "And my God will meet all your needs according to the riches of his glory in Christ Jesus.", ref: "Philippians 4:19" },
+  { text: "Do not be anxious about anything, but in every situation present your requests to God. And the peace of God will guard your hearts.", ref: "Philippians 4:6-7" },
+  { text: "But seek first his kingdom and his righteousness, and all these things will be given to you as well.", ref: "Matthew 6:33" },
+  { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", ref: "Proverbs 3:5-6" },
+  { text: "The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will no longer rebuke you, but will rejoice over you with singing.", ref: "Zephaniah 3:17" },
+  { text: "She sees that her trading is profitable, and her lamp does not go out at night.", ref: "Proverbs 31:18" },
+  { text: "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us.", ref: "Ephesians 3:20" },
+  { text: "The righteous person may have many troubles, but the Lord delivers them from them all.", ref: "Psalm 34:19" },
+  { text: "Even to your old age and grey hairs I am he, I am he who will sustain you. I have made you and I will carry you.", ref: "Isaiah 46:4" },
+  { text: "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.", ref: "2 Timothy 1:7" },
+  { text: "Taste and see that the Lord is good; blessed is the one who takes refuge in him.", ref: "Psalm 34:8" },
+  { text: "Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap.", ref: "Luke 6:38" },
+  { text: "The Lord will make you the head, not the tail. You will always be at the top, never at the bottom.", ref: "Deuteronomy 28:13" },
+  { text: "Being confident of this, that he who began a good work in you will carry it on to completion.", ref: "Philippians 1:6" },
+  { text: "Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.", ref: "Psalm 55:22" },
+  { text: "Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", ref: "Joshua 1:9" },
+  { text: "She considers a field and buys it; out of her earnings she plants a vineyard.", ref: "Proverbs 31:16" },
+  { text: "No weapon forged against you will prevail, and you will refute every tongue that accuses you.", ref: "Isaiah 54:17" },
+];
+
+let scriptureIdx = 0;
+
+function initScriptures(){
+  // Pick a random one to start
+  scriptureIdx = Math.floor(Math.random() * SCRIPTURES.length);
+  renderScripture();
+  // Auto-rotate every 30 seconds
+  setInterval(nextScripture, 30000);
+}
+
+function renderScripture(){
+  const s = SCRIPTURES[scriptureIdx];
+  setEl('scripture-text', '“' + s.text + '”');
+  setEl('scripture-ref', '— ' + s.ref);
+  // Dots
+  const dotsEl = document.getElementById('scripture-dots');
+  if(dotsEl){
+    // Show 5 dots max as position indicator
+    const total = Math.min(SCRIPTURES.length, 25);
+    dotsEl.innerHTML = Array.from({length:5}, (_,i) => {
+      const active = i === (scriptureIdx % 5);
+      return `<div class="sdot ${active?'active':''}"></div>`;
+    }).join('');
+  }
+}
+
+function nextScripture(){
+  scriptureIdx = (scriptureIdx + 1) % SCRIPTURES.length;
+  renderScripture();
+}
+
+// ══ NEW ORDER ══
+let noQtys = {};
+
+function openNewOrder(){
+  noQtys = {};
+  ['no-name','no-phone','no-notes'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('no-date').value = today();
+  document.getElementById('no-delivery').value = '0';
+  document.getElementById('no-paid').value = 'unpaid';
+  document.getElementById('no-deposit-wrap').style.display = 'none';
+  document.getElementById('no-total-disp').textContent = '₦0';
+  renderNoPicker();
+  openDrawer('ov-new-order');
+}
+
+function toggleNoDeposit(){
+  document.getElementById('no-deposit-wrap').style.display =
+    document.getElementById('no-paid').value === 'partial' ? 'block' : 'none';
+  updateNoTotal();
+}
+
+function renderNoPicker(){
+  const el = document.getElementById('no-picker');
+  if(!data.products.length){ el.innerHTML='<div style="padding:14px;font-size:13px;color:var(--i3);">No products loaded — tap ↻ Refresh first.</div>'; return; }
+  el.innerHTML = data.products.map(p => {
+    const q = noQtys[p.id] || 0;
+    return `<div style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bdr);gap:10px;">
+      <span style="font-size:16px;">${p.emoji||'🌿'}</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13.5px;font-weight:600;">${p.name}</div>
+        <div style="font-size:11px;color:var(--i3);">${p.size} · ₦${fmt(p.price)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div onclick="noChgQty('${p.id}',-1)" style="width:28px;height:28px;border-radius:7px;border:1.5px solid var(--bdr);background:var(--sand);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:700;color:var(--g);">−</div>
+        <div id="noq-${p.id}" style="font-family:'DM Mono',monospace;font-size:14px;font-weight:500;width:20px;text-align:center;">${q}</div>
+        <div onclick="noChgQty('${p.id}',1)" style="width:28px;height:28px;border-radius:7px;border:1.5px solid var(--bdr);background:var(--sand);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:700;color:var(--g);">+</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function noChgQty(id, delta){
+  noQtys[id] = Math.max(0, (noQtys[id]||0) + delta);
+  const el = document.getElementById('noq-'+id); if(el) el.textContent = noQtys[id];
+  updateNoTotal();
+}
+
+function updateNoTotal(){
+  const sub = Object.entries(noQtys).reduce((s,[id,q])=>{
+    const p = data.products.find(x=>x.id===id); return s + (p ? p.price*q : 0);
+  }, 0);
+  const delivery = parseFloat(document.getElementById('no-delivery')?.value)||0;
+  const el = document.getElementById('no-total-disp');
+  if(el) el.textContent = '₦' + fmt(sub + delivery);
+}
+
+function saveNewOrder(){
+  const name = (document.getElementById('no-name')?.value||'').trim();
+  if(!name){ toast('Enter customer name'); return; }
+  const items = Object.entries(noQtys).filter(([,q])=>q>0).map(([id,qty])=>{
+    const p = data.products.find(x=>x.id===id);
+    return p ? { id, name:p.name, size:p.size, price:p.price, cost:p.cost, qty,
+                 trackTime:p.trackTime, labourMins:p.labourMins } : null;
+  }).filter(Boolean);
+  if(!items.length){ toast('Add at least one item'); return; }
+
+  const delivery = parseFloat(document.getElementById('no-delivery')?.value)||0;
+  const sub = items.reduce((s,i)=>s+i.price*i.qty, 0);
+  const total = sub + delivery;
+  const cost = items.reduce((s,i)=>s+i.cost*i.qty, 0);
+  const paidStatus = document.getElementById('no-paid').value;
+  const deposit = paidStatus==='paid' ? total : paidStatus==='partial' ? (parseFloat(document.getElementById('no-deposit')?.value)||0) : 0;
+  const owed = total - deposit;
+  const totalLabourMins = items.filter(i=>i.trackTime).reduce((s,i)=>s+(i.labourMins||0)*i.qty, 0);
+  const labourTime = totalLabourMins > 0 ? (totalLabourMins>=60 ? Math.floor(totalLabourMins/60)+'h '+(totalLabourMins%60?totalLabourMins%60+'m':'') : totalLabourMins+'m') : '';
+  const itemsStr = items.map(i=>`${i.qty}× ${i.name} (${i.size})`).join(', ');
+
+  const order = {
+    orderId: 'WO-' + String(data.orders.length + 1).padStart(3,'0'),
+    customer: name,
+    phone: document.getElementById('no-phone')?.value||'',
+    date: document.getElementById('no-date')?.value||today(),
+    source: document.getElementById('no-source')?.value||'WhatsApp',
+    itemsStr, subtotal: sub, delivery, total, cost, profit: sub-cost,
+    deposit, owed, status: paidStatus==='paid'?'paid':'unpaid',
+    labourTime, notes: document.getElementById('no-notes')?.value||''
+  };
+
+  // Add to local data immediately
+  data.orders.push(order);
+  saveLocal();
+  closeDrawer('ov-new-order');
+  renderOrders();
+  renderDash();
+  toast('Order saved ✓');
+
+  // Push to Sheet in background
+  pushOrderToSheet(order);
+}
+
+async function pushOrderToSheet(order){
+  if(!navigator.onLine) return;
+  try{
+    const url = SCRIPT_URL + '?key=' + encodeURIComponent(SECRET_KEY);
+    await fetch(url, {
+      method: 'POST',
+      redirect: 'follow',
+      body: JSON.stringify({ action:'addOrder', key: SECRET_KEY, data: order }),
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  } catch(e){
+    console.warn('Could not push to Sheet — will sync on next refresh');
+  }
+}
+
 // ══ INIT ══
 loadLocal();
 updateOnline();
 renderAll();
+initScriptures();
 // Auto-load fresh data on open
 if(navigator.onLine){ setTimeout(loadData, 600); }
 else { setEl('last-updated','Offline — showing saved data'); }
